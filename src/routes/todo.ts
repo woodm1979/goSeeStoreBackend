@@ -1,4 +1,4 @@
-import express, { Request, Response} from 'express'
+import express, { Request, Response } from 'express'
 import { Todo } from '../models/todo'
 
 const router = express.Router()

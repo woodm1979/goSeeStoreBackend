@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 
 interface ITodo {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
 interface TodoDoc extends mongoose.Document {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
 interface TodoModelInterface extends mongoose.Model<TodoDoc> {
