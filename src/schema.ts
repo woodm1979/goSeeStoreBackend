@@ -11,21 +11,20 @@ export const typeDefs = gql`
   type User {
     id: ID!
     name: String!
+    #stores: [Store!]!
+    shoppingLists: [ShoppingList!]!
   }
 
   type Store {
     id: ID!
     name: String!
-  }
-
-  type Ingredient {
-    id: ID!
-    name: String!
+    ingredients: [StoreIngredient!]!
   }
 
   type ShoppingList {
     id: ID!
     name: String
+    ingredients: [ShoppingListIngredient!]!
   }
 
   type StoreIngredient {
@@ -40,6 +39,11 @@ export const typeDefs = gql`
     ingredient: Ingredient!
     dateAdded: Date!
     dateCheckedOff: Date
+  }
+
+  type Ingredient {
+    id: ID!
+    name: String!
   }
 `
 
