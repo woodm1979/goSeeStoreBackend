@@ -83,12 +83,9 @@ export const resolvers = {
   Query: {
     hello: () => 'Hello World!',
     todos: async () => Todo.find({}),
-    todo: async ({}, { id }: { id: any }) => {
-      return Todo.findById(id)
-    },
-    todosByTitle: async ({}, { titleRegex }: { titleRegex: any }) => {
-      return Todo.find({ title: RegExp(titleRegex) })
-    },
+    todo: async ({}, { id }: { id: any }) => Todo.findById(id),
+    todosByTitle: async ({}, { titleRegex }: { titleRegex: any }) =>
+      Todo.find({ title: RegExp(titleRegex) }),
   },
   Mutation: {
     createTodo: async ({}, args: { title: string; description: string }) => {
