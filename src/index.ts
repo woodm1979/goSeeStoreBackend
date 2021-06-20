@@ -31,7 +31,7 @@ const graphQLServer = new ApolloServer({
   typeDefs,
   resolvers,
 })
-graphQLServer.listen().then(() => {
+graphQLServer.listen({ port: 4000, path: '/graphql' }).then(() => {
   console.log(`
     Server is running!
     Listening on port 4000

@@ -1,50 +1,60 @@
 import { gql } from 'apollo-server'
 import { GraphQLScalarType, Kind } from 'graphql'
+import { Todo } from './models/todo'
 
 export const typeDefs = gql`
   scalar Date
 
   type Query {
     hello: String!
+    todos: [Todo!]!
+    todo(id: ID!): Todo
+    todosByTitle(titleRegex: String!): [Todo!]!
   }
 
-  type User {
+  type Todo {
     id: ID!
-    name: String!
-    #stores: [Store!]!
-    shoppingLists: [ShoppingList!]!
+    title: String!
+    description: String
   }
 
-  type Store {
-    id: ID!
-    name: String!
-    ingredients: [StoreIngredient!]!
-  }
-
-  type ShoppingList {
-    id: ID!
-    name: String
-    ingredients: [ShoppingListIngredient!]!
-  }
-
-  type StoreIngredient {
-    id: ID!
-    store: Store!
-    ingredient: Ingredient!
-    aisle: String
-  }
-
-  type ShoppingListIngredient {
-    id: ID!
-    ingredient: Ingredient!
-    dateAdded: Date!
-    dateCheckedOff: Date
-  }
-
-  type Ingredient {
-    id: ID!
-    name: String!
-  }
+  #  type User {
+  #    id: ID!
+  #    name: String!
+  #    #stores: [Store!]!
+  #    shoppingLists: [ShoppingList!]!
+  #  }
+  #
+  #  type Store {
+  #    id: ID!
+  #    name: String!
+  #    ingredients: [StoreIngredient!]!
+  #  }
+  #
+  #  type ShoppingList {
+  #    id: ID!
+  #    name: String
+  #    ingredients: [ShoppingListIngredient!]!
+  #  }
+  #
+  #  type StoreIngredient {
+  #    id: ID!
+  #    store: Store!
+  #    ingredient: Ingredient!
+  #    aisle: String
+  #  }
+  #
+  #  type ShoppingListIngredient {
+  #    id: ID!
+  #    ingredient: Ingredient!
+  #    dateAdded: Date!
+  #    dateCheckedOff: Date
+  #  }
+  #
+  #  type Ingredient {
+  #    id: ID!
+  #    name: String!
+  #  }
 `
 
 const dateScalar = new GraphQLScalarType({
@@ -68,5 +78,12 @@ export const resolvers = {
   Date: dateScalar,
   Query: {
     hello: () => 'Hello World!',
+    todos: async () => Todo.find({}),
+    todo: async ({}, { id }: { id: any }) => {
+      return Todo.findById(id)
+    },
+    todosByTitle: async ({}, { titleRegex }: { titleRegex: any }) => {
+      return Todo.find({ title: RegExp(titleRegex) })
+    },
   },
 }
