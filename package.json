@@ -24,6 +24,7 @@
   "dependencies": {
     "apollo": "^2.33.4",
     "apollo-datasource": "^0.9.0",
+    "apollo-datasource-mongodb": "^0.4.3",
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
     "apollo-server": "^2.25.1",

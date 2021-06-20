@@ -1,11 +1,14 @@
 import mongoose from 'mongoose'
+import { MongoDataSource } from 'apollo-datasource-mongodb'
+import { ObjectId } from 'mongodb'
+import { DataSourceContext } from '../interfaces'
 
-interface ITodo {
+export interface ITodo {
   title: string
   description: string
 }
 
-interface TodoDoc extends mongoose.Document {
+export interface TodoDoc extends mongoose.Document {
   title: string
   description: string
 }
@@ -29,10 +32,21 @@ todoSchema.statics.build = (attr: ITodo) => {
   return new Todo(attr)
 }
 
-const Todo = mongoose.model<any, TodoModelInterface>('Todo', todoSchema)
+export const Todo = mongoose.model<any, TodoModelInterface>('Todo', todoSchema)
 
-Todo.build({
-  title: 'yo',
-  description: 'dog',
-})
-export { Todo }
+export class TodosDataSource extends MongoDataSource<
+  TodoDoc,
+  DataSourceContext
+> {
+  getTodo(todoId: ObjectId) {
+    // This method is likely not useful in it's current state.
+    // Right now it's a pass-through to this.findOneById, but
+    // in the future, we'll add authorization and the like here.
+    //
+    // Should likely add a similar method for todosByTitle
+    //
+    // this.context has type `Context` as defined above
+    // this.findOneById has type `(id: ObjectId) => Promise<TodoDoc | null | undefined>`
+    return this.findOneById(todoId)
+  }
+}

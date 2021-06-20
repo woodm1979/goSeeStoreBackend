@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server'
 import { GraphQLScalarType, Kind } from 'graphql'
-import { Todo } from './models/todo'
+
+import { Context, IdArg, TitleArg } from './interfaces'
+import { Todo, ITodo } from './models/todo'
 
 export const typeDefs = gql`
   scalar Date
@@ -9,13 +11,13 @@ export const typeDefs = gql`
     hello: String!
     todos: [Todo!]!
     todo(id: ID!): Todo
-    todosByTitle(titleRegex: String!): [Todo!]!
+    todosByTitle(title: String!): [Todo!]!
   }
 
   type Todo {
     id: ID!
     title: String!
-    description: String
+    description: String!
   }
 
   #  type User {
@@ -83,12 +85,13 @@ export const resolvers = {
   Query: {
     hello: () => 'Hello World!',
     todos: async () => Todo.find({}),
-    todo: async ({}, { id }: { id: any }) => Todo.findById(id),
-    todosByTitle: async ({}, { titleRegex }: { titleRegex: any }) =>
-      Todo.find({ title: RegExp(titleRegex) }),
+    todo: async (_: any, args: IdArg, context: Context) =>
+      context.dataSources.todos.getTodo(args.id),
+    todosByTitle: async (_: any, { title }: TitleArg, context: Context) =>
+      context.dataSources.todos.findByFields({ title }),
   },
   Mutation: {
-    createTodo: async ({}, args: { title: string; description: string }) => {
+    createTodo: async (_: any, args: ITodo) => {
       const { title, description } = args
       const todo = Todo.build({ title, description })
       await todo.save()
