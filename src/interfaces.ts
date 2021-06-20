@@ -1,10 +1,7 @@
 import { ObjectId } from 'mongodb'
 
 import { TodosDataSource } from './models/todo'
-
-export interface DataSourceContext {
-  // loggedInUser: UserDocument
-}
+import { DataSourceContext } from './models/interfaces'
 
 export interface Context extends DataSourceContext {
   dataSources: {

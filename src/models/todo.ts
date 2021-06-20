@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb'
-import { DataSourceContext } from '../interfaces'
+
+import { DataSourceContext } from './interfaces'
 
 export interface ITodo {
   title: string
