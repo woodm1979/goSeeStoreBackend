@@ -55,6 +55,10 @@ export const typeDefs = gql`
   #    id: ID!
   #    name: String!
   #  }
+
+  type Mutation {
+    createTodo(title: String!, description: String): Todo
+  }
 `
 
 const dateScalar = new GraphQLScalarType({
@@ -84,6 +88,14 @@ export const resolvers = {
     },
     todosByTitle: async ({}, { titleRegex }: { titleRegex: any }) => {
       return Todo.find({ title: RegExp(titleRegex) })
+    },
+  },
+  Mutation: {
+    createTodo: async ({}, args: { title: string; description: string }) => {
+      const { title, description } = args
+      const todo = Todo.build({ title, description })
+      await todo.save()
+      return todo
     },
   },
 }
